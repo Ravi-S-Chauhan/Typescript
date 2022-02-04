@@ -1,6 +1,22 @@
 "use strict";
-let re = 1;
-console.log(typeof (re));
+var _a;
+function add(a, b) {
+    if (typeof a === 'string' || typeof b === 'string') {
+        return a.toString() + b.toString();
+    }
+    return a + b;
+}
+const result = add('max', ' masdf');
+result.split(' ');
+console.log(result);
+const fetchUserData = {
+    id: 'u1',
+    name: 'Max',
+    job: { title: 'CEO', description: 'My own company' }
+};
+console.log((_a = fetchUserData === null || fetchUserData === void 0 ? void 0 : fetchUserData.job) === null || _a === void 0 ? void 0 : _a.title);
+const userInput = "";
+const storedData = userInput !== null && userInput !== void 0 ? userInput : 'DEFAULT';
 const Nam = {
     name: 'Ravi',
     privileges: ['creaet-server'],
@@ -54,4 +70,10 @@ const sparrow = {
     type: 'bird'
 };
 moveAnimal(sparrow);
+const userInputElement = document.getElementById('textinput');
+userInputElement.value = 'Hi there!';
+const errorBag = {
+    email: 'Not a valid email',
+    username: 'Must start with a character'
+};
 //# sourceMappingURL=app.js.map

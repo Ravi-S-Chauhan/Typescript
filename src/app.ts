@@ -23,9 +23,34 @@ type Combineable = string | number;
 type Numeric = number | boolean;
 
 type universal = Combineable & Number
+function add(a:number,b:number) :number;
+function add(a:string,b:string):string;
+function add(a:Combineable,b:Combineable){
+    if(typeof a ==='string' || typeof b === 'string'){
+        return a.toString() + b.toString();
+    }
+    return a + b;
+}
 
-let  re:universal= 1
-console.log(typeof(re))
+const result = add('max',' masdf');
+result.split(' ');
+console.log(result);
+
+const fetchUserData = {
+    id: 'u1',
+    name: 'Max',
+    job: {title: 'CEO', description: 'My own company'}
+};
+
+
+//Optional chaining
+console.log( fetchUserData?.job?.title);
+
+const userInput =  "";
+
+//Nullish Coalescing
+const storedData = userInput ?? 'DEFAULT';
+
 
 const  Nam: ElevatedEmp = {
     name :'Ravi',
@@ -97,3 +122,17 @@ const sparrow:Bird = {
     type:'bird'
 }
 moveAnimal(sparrow)
+
+//const userInputElement = <HTMLInputElement>document.getElementById('textinput')!;
+const userInputElement = document.getElementById('textinput') as HTMLInputElement;
+
+userInputElement.value = 'Hi there!';
+
+interface ErrorContainer{
+    [prop:string]:string;
+}
+const errorBag:ErrorContainer = {
+    email:'Not a valid email',
+    username:'Must start with a character'
+};
+

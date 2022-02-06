@@ -65,3 +65,23 @@ console.log(textStorage.getItems());
 // objStorage.addItem({name:'Bob'});
 // objStorage.removeItem({name:'Alice'});
 // console.log(objStorage.getItems());
+
+interface CourseGoal{
+    title:string;
+    description:string;
+    completeUntil:Date;
+}
+
+function createCourseGoal(title:string,descrition:string,date:Date)
+:CourseGoal{
+    let courseGoal:Partial<CourseGoal> = {};
+    courseGoal.title=title,
+    courseGoal.description=descrition,
+    courseGoal.completeUntil=date;
+
+    return courseGoal as CourseGoal;
+}
+
+const names:Readonly<string[]> = ['Alice', 'Bob'];
+//names.push('Mallory');
+// names.pop();

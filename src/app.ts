@@ -1,87 +1,82 @@
-// const names:Array<String> = ['Alice', 'Bob', 'Tiff', 'Bruce', 'Alice'];
 
-// const promise:Promise<String> = new Promise((resolve,reject) => {
-//     setTimeout(():void => {
-//         resolve('This is my resolved data');
-//         }, 2000);
-// });
-
-// promise.then(data => {
-//     data.split(' ');
-// })
-
-
-function mergeObjects<T extends object, U extends object>(obj1: T, obj2: U) {
-    return Object.assign(obj1, obj2);
-}
-// console.log(mergeObjects({ name: 'Alice' }, { age: 50 }));
-
-const merg = mergeObjects({ name: 'Alice' }, { age: 50 });
-console.log(merg.age);
-
-interface lengthy{
-    length:number;
-
-}
-
-function countAndDescibe<T extends lengthy>(element:T):[T,string]{
-    let descriptionText = 'Got no value.';
-    if(element.length > 0){
-        descriptionText = 'Got ' + element.length + ' elements.';
+// autobind decorator
+function autobind(_:any,_2:string,descriptor:PropertyDescriptor){
+    const originalMethod = descriptor.value;
+    const adjDescriptor:PropertyDescriptor = {
+        configurable:true,
+        get(){
+            const boundFn = originalMethod.bind(this)
+            return boundFn
+        }
     }
-    return [element, descriptionText];
+    return adjDescriptor;
 }
-console.log(countAndDescibe(['sports', 'cooking']));
 
-//keyof 
 
-function extractAndConvert<T extends object,U extends keyof T>(obj:T,key:U){
-    return 'Value : '+obj[key];
+// ProjectInput Class
+class ProjectInput {
+    templateElement: HTMLTemplateElement;
+    hostElement: HTMLElement;
+    element:HTMLFormElement;
+    titleInputElement: HTMLInputElement;
+    descriptionInputElement: HTMLInputElement;
+    peopleInputElement: HTMLInputElement;
+
+
+    constructor() {
+        this.templateElement = document.querySelector('#project-input')! as HTMLTemplateElement;
+        this.hostElement = document.getElementById('app')! as HTMLDivElement;
+
+        const importedNode = document.importNode(this.templateElement.content,true);
+        this.element = importedNode.firstElementChild as HTMLFormElement;
+        this.element.id = 'user-input';
+
+        this.titleInputElement = this.element.querySelector('#title') as HTMLInputElement;
+        this.descriptionInputElement = this.element.querySelector('#description') as HTMLInputElement;
+        this.peopleInputElement = this.element.querySelector('#people') as HTMLInputElement;
+
+        this.configure()
+        this.attach();
 }
-extractAndConvert({name:'Alice'}, 'name');
 
-class DataStorage<T extends string|boolean|number>{
-    private data:T[]=[];
+private gatherUserInput(): [string,string,number] | void{
+    const enteredTitle = this.titleInputElement.value;
+    const enteredDescription = this.descriptionInputElement.value;
+    const enteredPeople = this.peopleInputElement.value;
 
-    addItem(item:T){   
-        this.data.push(item);
+    if (enteredTitle.trim().length === 0 ||
+        enteredDescription.trim().length === 0 ||
+        enteredTitle.trim().length === 0 ){
+            alert('Invalid input, please try again')
+        } else {
+            return[enteredTitle,enteredDescription,+enteredPeople]
+        }
+
+}
+private clearInputs(){
+    this.titleInputElement.value = '';
+    this.descriptionInputElement.value = '';
+    this.peopleInputElement.value = ''
+}
+
+@autobind
+private submitHandler(event:Event){
+    event.preventDefault();
+    const userInput = this.gatherUserInput();
+    if (Array.isArray(userInput)){
+        const [title,description,people] = userInput
+        console.log(title,description,people)
     }
-    removeItem(item:T){
-        this.data.splice(this.data.indexOf(item),1);
-    }
-    getItems(){
-        return [...this.data]
-    }
-
-}
-const textStorage = new DataStorage<string>();
-textStorage.addItem('asd')
-textStorage.removeItem('asd')
-textStorage.addItem('second')
-console.log(textStorage.getItems());
-
-// const objStorage = new DataStorage<object>();
-// objStorage.addItem({name:'Alice'});
-// objStorage.addItem({name:'Bob'});
-// objStorage.removeItem({name:'Alice'});
-// console.log(objStorage.getItems());
-
-interface CourseGoal{
-    title:string;
-    description:string;
-    completeUntil:Date;
+    this.clearInputs()
 }
 
-function createCourseGoal(title:string,descrition:string,date:Date)
-:CourseGoal{
-    let courseGoal:Partial<CourseGoal> = {};
-    courseGoal.title=title,
-    courseGoal.description=descrition,
-    courseGoal.completeUntil=date;
+private configure(){
+    this.element.addEventListener('submit',this.submitHandler);
+}
+private attach(){
+    this.hostElement.insertAdjacentElement('afterbegin',this.element);
 
-    return courseGoal as CourseGoal;
+}
 }
 
-const names:Readonly<string[]> = ['Alice', 'Bob'];
-//names.push('Mallory');
-// names.pop();
+const prjInput = new ProjectInput()
